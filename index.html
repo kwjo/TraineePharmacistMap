@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="app.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+
+    <title>Document</title>
+</head>
+
+<body>
+    <style>
+        .marker {
+            display: block;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+        }
+    </style>
+
+    <div id='map' style='width: 1000px; height: 800px;'></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia3dqbyIsImEiOiJja3ZmcHUwb2k0bnk4MnBscGVyZGw1Z241In0.H0oY8ikw_jZyUAm4ThFHAw';
+        const geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'message': 'Hammersmith Hospital',
+                        'iconSize': [60, 60]
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-0.236235, 51.517636]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'message': 'Bar',
+                        'iconSize': [50, 50]
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-61.21582, -15.971891]
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'properties': {
+                        'message': 'Baz',
+                        'iconSize': [40, 40]
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-63.292236, -18.281518]
+                    }
+                }
+            ]
+        };
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [-0.236235, 51.517636], // starting position [lng, lat]
+            zoom: 14 // starting zoom
+        });
+
+        // Add markers to the map.
+        for (const marker of geojson.features) {
+            // Create a DOM element for each marker.
+            const el = document.createElement('div');
+            const width = marker.properties.iconSize[0];
+            const height = marker.properties.iconSize[1];
+            el.className = 'marker';
+            el.style.backgroundImage = url('tennis.png');
+            el.style.width = `${width}px`;
+            el.style.height = `${height}px`;
+            el.style.backgroundSize = '100%';
+
+            el.addEventListener('click', () => {
+                window.alert(marker.properties.message);
+            });
+
+            // Add markers to the map.
+            new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+        }
+
+    </script>
+
+</body>
+
+</html>
